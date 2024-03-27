@@ -7,7 +7,6 @@ const userSchema = new Schema(
     {
         username: {
             type: String,
-            required: true,
             unique: true,
             lowercase: true,
             trim: true,
@@ -32,14 +31,36 @@ const userSchema = new Schema(
         },
         refreshToken: {
             type: String
-        }
+        },
+        role: {
+            type: String,
+            default: "buyer"
+        },
+        gender: {
+            type: String,
+            trim: true,
+            required: [true, 'Gender is required']
+        },
+        wishList: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: "Product"
+            }
+        ],
+        cart: [
+            {
+              type: mongoose.Schema.Types.ObjectId,
+              ref: "Product",
+            },
+        ],
     },
     {
         timestamps: true 
     }
 );
 
-// Middleware function to hash the password before saving
+// Middleware function to hash the password and generate username before saving
+
 userSchema.pre("save", async function (next) {
     // Hash the password only if it has been modified
     if (!this.isModified("password")) return next();

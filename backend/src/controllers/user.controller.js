@@ -3,43 +3,41 @@ import { asyncHandler } from "../utils/AsyncHandler.js";
 import { User } from "../models/user.model.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import jwt from "jsonwebtoken";
+import { isValidEmail, isValidPassword, isValidFullName, generateUsername } from "./functions.js";
 
-// Function to check if an email is in a valid format
-function isValidEmail(email) {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email);
-}
-
-// Function to check if a password meets the required format
-function isValidPassword(password) {
-  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{8,}$/;
-  return passwordRegex.test(password);
-}
 // Function to generate access and refresh tokens for a user
-const generateAccessAndRefereshTokens = async(userId) =>{
-    try {
-        const user = await User.findById(userId)
-        const accessToken = user.generateAccessToken()
-        const refreshToken = user.generateRefreshToken()
+const generateAccessAndRefereshTokens = async (userId) => {
+  try {
+    const user = await User.findById(userId);
+    const accessToken = user.generateAccessToken();
+    const refreshToken = user.generateRefreshToken();
 
-        user.refreshToken = refreshToken
-        await user.save({ validateBeforeSave: false })
+    user.refreshToken = refreshToken;
+    await user.save({ validateBeforeSave: false });
 
-        return {accessToken, refreshToken}
-
-
-    } catch (error) {
-        throw new ApiError(500, "Something went wrong while generating referesh and access token")
-    }
-}
+    return { accessToken, refreshToken };
+  } catch (error) {
+    throw new ApiError(
+      500,
+      "Something went wrong while generating referesh and access token"
+    );
+  }
+};
 
 // Controller function to register a new user
 const registerUser = asyncHandler(async (req, res) => {
-  const { fullName, email, username, password } = req.body;
+  const { fullName, email, password } = req.body;
 
   // Validate input fields
-  if ([fullName, email, username, password].some((field) => field?.trim() === "")) {
+  if ([fullName, email, password].some((field) => field?.trim() === "")) {
     throw new ApiError(400, "All fields are required");
+  }
+
+  if (!isValidFullName(fullName)) {
+    throw new ApiError(
+      400,
+      "Name is invalid it must be contains only characters"
+    );
   }
 
   if (!isValidEmail(email)) {
@@ -48,29 +46,32 @@ const registerUser = asyncHandler(async (req, res) => {
   if (!isValidPassword(password)) {
     throw new ApiError(400, "Invalid password format");
   }
-
-  // Check if user with the same email or username already exists
-  const existedUser = await User.findOne({ $or: [{ username }, { email }] });
+  // Check if user with the same email already exists
+  const existedUser = await User.findOne({ email });
   if (existedUser) {
-    throw new ApiError(409, "User with email or username already exists");
+    throw new ApiError(409, "User with this email already exists");
   }
+
+  const username = await generateUsername(fullName);
 
   // Create new user
   const user = await User.create({
-    fullName,
-    email,
+    fullName: fullName.toLowerCase(),
+    email: email.toLowerCase(),
     password,
-    username: username.toLowerCase(),
+    username,
   });
 
   // Remove sensitive data from user object
-  const createdUser = await User.findById(user._id).select("-password -refreshToken");
+  const createdUser = await User.findById(user._id).select(
+    "-password -refreshToken"
+  );
 
   // Return response
-  return res.status(201).json(new ApiResponse(200, createdUser, "User registered Successfully"));
+  return res
+    .status(201)
+    .json(new ApiResponse(200, createdUser, "User registered Successfully"));
 });
-
-
 
 // Controller function to log in a user
 const loginUser = asyncHandler(async (req, res) => {
@@ -94,10 +95,14 @@ const loginUser = asyncHandler(async (req, res) => {
   }
 
   // Generate access and refresh tokens
-  const { accessToken, refreshToken } = await generateAccessAndRefereshTokens(user._id);
+  const { accessToken, refreshToken } = await generateAccessAndRefereshTokens(
+    user._id
+  );
 
   // Get user data without sensitive information
-  const loggedInUser = await User.findById(user._id).select("-password -refreshToken");
+  const loggedInUser = await User.findById(user._id).select(
+    "-password -refreshToken"
+  );
 
   // Set options for cookies
   const options = { httpOnly: true, secure: true };
@@ -107,13 +112,23 @@ const loginUser = asyncHandler(async (req, res) => {
     .status(200)
     .cookie("accessToken", accessToken, options)
     .cookie("refreshToken", refreshToken, options)
-    .json(new ApiResponse(200, { user: loggedInUser, accessToken, refreshToken }, "User logged In Successfully"));
+    .json(
+      new ApiResponse(
+        200,
+        { user: loggedInUser, accessToken, refreshToken },
+        "User logged In Successfully"
+      )
+    );
 });
 
 // Controller function to log out a user
 const logoutUser = asyncHandler(async (req, res) => {
   // Remove refreshToken from user document
-  await User.findByIdAndUpdate(req.user._id, { $unset: { refreshToken: 1 } }, { new: true });
+  await User.findByIdAndUpdate(
+    req.user._id,
+    { $unset: { refreshToken: 1 } },
+    { new: true }
+  );
 
   // Set options for cookies
   const options = { httpOnly: true, secure: true };
@@ -129,7 +144,8 @@ const logoutUser = asyncHandler(async (req, res) => {
 // Controller function to refresh access token
 const refreshAccessToken = asyncHandler(async (req, res) => {
   // Get refreshToken from cookies or request body
-  const incomingRefreshToken = req.cookies.refreshToken || req.body.refreshToken;
+  const incomingRefreshToken =
+    req.cookies.refreshToken || req.body.refreshToken;
 
   // Validate refreshToken
   if (!incomingRefreshToken) {
@@ -138,7 +154,10 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
 
   try {
     // Verify refreshToken and find user
-    const decodedToken = jwt.verify(incomingRefreshToken, process.env.REFRESH_TOKEN_SECRET);
+    const decodedToken = jwt.verify(
+      incomingRefreshToken,
+      process.env.REFRESH_TOKEN_SECRET
+    );
     const user = await User.findById(decodedToken?._id);
 
     if (!user || incomingRefreshToken !== user?.refreshToken) {
@@ -146,7 +165,8 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     }
 
     // Generate new access and refresh tokens
-    const { accessToken, newRefreshToken } = await generateAccessAndRefereshTokens(user._id);
+    const { accessToken, newRefreshToken } =
+      await generateAccessAndRefereshTokens(user._id);
 
     // Set options for cookies
     const options = { httpOnly: true, secure: true };
@@ -156,7 +176,13 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
       .status(200)
       .cookie("accessToken", accessToken, options)
       .cookie("refreshToken", newRefreshToken, options)
-      .json(new ApiResponse(200, { accessToken, refreshToken: newRefreshToken }, "Access token refreshed"));
+      .json(
+        new ApiResponse(
+          200,
+          { accessToken, refreshToken: newRefreshToken },
+          "Access token refreshed"
+        )
+      );
   } catch (error) {
     throw new ApiError(401, error?.message || "Invalid refresh token");
   }
@@ -183,45 +209,61 @@ const changeCurrentPassword = asyncHandler(async (req, res) => {
   await user.save({ validateBeforeSave: false });
 
   // Return success response
-  return res.status(200).json(new ApiResponse(200, {}, "Password changed successfully"));
+  return res
+    .status(200)
+    .json(new ApiResponse(200, {}, "Password changed successfully"));
 });
 
 // Controller function to get current user details
 const getCurrentUser = asyncHandler(async (req, res) => {
-  return res.status(200).json(new ApiResponse(200, req.user, "User fetched successfully"));
+  return res
+    .status(200)
+    .json(new ApiResponse(200, req.user, "User fetched successfully"));
 });
-
 
 // Controller function to update account details
 const updateAccountDetails = asyncHandler(async (req, res) => {
-    const { fullName, email } = req.body;
-  
-    // Validate input
-    if (!fullName || !email) {
-      throw new ApiError(400, "All fields are required");
-    }
-  
-    // Update user details
-    const user = await User.findByIdAndUpdate(
-      req.user?._id,
-      { $set: { fullName, email } },
-      { new: true }
-    ).select("-password");
-  
-    // Return updated user details
-    return res
-      .status(200)
-      .json(new ApiResponse(200, user, "Account details updated successfully"));
-  });
-  
-  // Export controller functions
-  export {
-    registerUser,
-    loginUser,
-    logoutUser,
-    refreshAccessToken,
-    changeCurrentPassword,
-    getCurrentUser,
-    updateAccountDetails
-  };
-  
+  const { fullName, email } = req.body;
+
+  // Validate input
+  if (!fullName || !email) {
+    throw new ApiError(400, "All fields are required");
+  }
+
+  if (!isValidEmail(email)) {
+    throw new ApiError(400, "Invalid email address");
+  }
+  if (!isValidFullName(fullName)) {
+    throw new ApiError(
+      400,
+      "Name is invalid it must be contains only characters"
+    );
+  }
+
+  const existedUser = await User.findOne({ email });
+  if (existedUser && existedUser.username !== req.user.username) {
+    throw new ApiError(409, "User with this email already exists");
+  }
+  // Update user details
+  const user = await User.findByIdAndUpdate(
+    req.user?._id,
+    { $set: { fullName: fullName.toLowerCase(), email: email.toLowerCase() } },
+    { new: true }
+  ).select("-password");
+
+  // Return updated user details
+  return res
+    .status(200)
+    .json(new ApiResponse(200, user, "Account details updated successfully"));
+});
+
+// Export controller functions
+export {
+  registerUser,
+  loginUser,
+  logoutUser,
+  refreshAccessToken,
+  changeCurrentPassword,
+  getCurrentUser,
+  updateAccountDetails,
+};

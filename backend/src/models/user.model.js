@@ -34,11 +34,13 @@ const userSchema = new Schema(
         },
         role: {
             type: String,
-            default: "buyer"
+            enum: ['buyer', 'seller'],
+            default: "buyer",
+            required: [true, 'Role is required']
         },
         gender: {
             type: String,
-            trim: true,
+            enum: ['male', 'female'],
             required: [true, 'Gender is required']
         },
         wishList: [

@@ -26,30 +26,36 @@ const generateAccessAndRefereshTokens = async (userId) => {
 
 // Controller function to register a new user
 const registerUser = asyncHandler(async (req, res) => {
-  const { fullName, email, password } = req.body;
+  const { fullName,gender, role, email, password } = req.body;
 
   // Validate input fields
-  if ([fullName, email, password].some((field) => field?.trim() === "")) {
-    throw new ApiError(400, "All fields are required");
+  if ([fullName, gender, role, email, password].some((field) => field?.trim() === "")) {
+    // throw new ApiError(400, "All fields are required");
+    return res.status(201).json(new ApiResponse(401, {}, "All fields are required")); 
   }
 
   if (!isValidFullName(fullName)) {
-    throw new ApiError(
-      400,
-      "Name is invalid it must be contains only characters"
-    );
+    // throw new ApiError(
+    //   400,
+    //   "Name is invalid it must be contains only characters"
+    // );
+    return res.status(201).json(new ApiResponse(401, {}, "Name is invalid it must be contains only characters"));
   }
 
   if (!isValidEmail(email)) {
-    throw new ApiError(400, "Invalid email address");
+    // throw new ApiError(400, "Invalid email address");
+    return res.status(201).json(new ApiResponse(401, {}, "Invalid email address"));
   }
   if (!isValidPassword(password)) {
-    throw new ApiError(400, "Invalid password format");
+    // throw new ApiError(400, "Invalid password format");
+    return res.status(201).json(new ApiResponse(401, {}, "Invalid password format"));
+
   }
   // Check if user with the same email already exists
   const existedUser = await User.findOne({ email });
   if (existedUser) {
-    throw new ApiError(409, "User with this email already exists");
+    // throw new ApiError(401, "User with this email already exists");
+    return res.status(201).json(new ApiResponse(401, {}, "User with this email already exists"));
   }
 
   const username = await generateUsername(fullName);
@@ -60,6 +66,8 @@ const registerUser = asyncHandler(async (req, res) => {
     email: email.toLowerCase(),
     password,
     username,
+    gender,
+    role
   });
 
   // Remove sensitive data from user object
@@ -91,7 +99,8 @@ const loginUser = asyncHandler(async (req, res) => {
   // Check if the password is correct
   const isPasswordValid = await user.isPasswordCorrect(password);
   if (!isPasswordValid) {
-    throw new ApiError(401, "Invalid user credentials");
+    // throw new ApiError(401, "Invalid user credentials");
+    return res.status(201).json(new ApiResponse(401, {}, "Invalid user credentials"));
   }
 
   // Generate access and refresh tokens

@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
-const reviewSchema = new mongoose.Schema({
+const reviewSchema = new Schema({
     rating:{
         type:Number,
         min:0,

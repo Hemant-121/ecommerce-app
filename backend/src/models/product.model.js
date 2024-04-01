@@ -2,21 +2,21 @@ import mongoose, { Schema } from "mongoose";
 
 const productSchema = new Schema(
   {
-    name: {
+    prodName: {
       type: String,
       required: true,
     },
-    price: {
+    prodPrice: {
       type: Number,
       min: 0,
       required: true,
     },
-    description: {
+    prodDesc: {
       type: String,
       required: true,
     },
 
-    image: {
+    prodImage: {
       type: String,
       required: true,
     },
@@ -29,22 +29,20 @@ const productSchema = new Schema(
       ref: "User",
       required: true,
     },
-    review: [
+    prodReview: [
       {
         type: Schema.Types.ObjectId,
         ref: "Review",
         required: true,
       },
     ],
-    category: [
+    prodCategory: 
         {
           type: Schema.Types.ObjectId,
-          ref: "category",
-          required: true,
+          ref: "Category",
         },
-      ],
   },
   { timestamps: true }
 );
 
-export const Product = new mongoose.Model("Product", productSchema);
+export const Product = new mongoose.model("Product", productSchema);

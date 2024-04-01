@@ -3,12 +3,9 @@ import mongoose, { Schema } from "mongoose";
 const categorySchema = new Schema({
     name: {
         type: String,
-        required: true
-    },
-    products: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Product'
-    }]
+        required: true,
+        unique: true
+    }
 }, {timestamps: true});
 
 

@@ -1,6 +1,9 @@
 import Carousal from "../components/Home/Carousal";
 import Slider from "../components/Home/Slider";
 
+
+
+
 const Home = () => {
   return (
     <div className="h-[92vh] ">

@@ -2,6 +2,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../../redux-toolkit/authSlice";
 import toast from "react-hot-toast";
+import { userLogout } from "../../services/ApiServices";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -12,9 +13,13 @@ const Header = () => {
 
   const handleLogout = async () => {
     try {
+      const res = await userLogout();
+      console.log(res.data);
+      if(res.data.success) {
+        toast.success(res.data.message);
+        navigate("/login");
+      }
       dispatch(logout());
-      toast.success("Logged out successfully");
-      navigate("/login");
     } catch (error) {
       console.error("Logout error:", error);
       toast.error("Failed to log out");

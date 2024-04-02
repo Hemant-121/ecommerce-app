@@ -1,5 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import authReducer from './authSlice';
+import productsReducer from './authSlice';
 
 const saveState = (state) => {
   try {
@@ -28,6 +29,7 @@ const persistedState = loadState();
 const store = configureStore({
   reducer: {
     auth: authReducer,
+    products: productsReducer
   },
   preloadedState: persistedState, // Place preloadedState here
 });

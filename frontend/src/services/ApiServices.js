@@ -45,5 +45,12 @@ export const AddNewProduct = async (data) => {
         console.log('Error while calling Signup API: ', error);
     }
 }
+export const getProducts = async () => {
+    try {
+        return await axiosInstance.get(`/product/all-product`)
+    } catch (error) {
+        console.log('Error while calling Signup API: ', error);
+    }
+}
 
 export default axiosInstance;

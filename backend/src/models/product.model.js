@@ -41,6 +41,15 @@ const productSchema = new Schema(
           type: Schema.Types.ObjectId,
           ref: "Category",
         },
+    brand:{
+      type: String,
+    },
+    keywords: {
+      type: [String]
+    },
+    attributes: {
+      type: {}
+    }
   },
   { timestamps: true }
 );

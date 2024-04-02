@@ -11,6 +11,7 @@ function App() {
     <div className="fixed top-0 w-full z-10">
       <Header />
     </div>
+    {/* <br /> */}
     <div className="mt-20">
       <Outlet />
     </div>

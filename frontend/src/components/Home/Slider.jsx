@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import Card from "./Card";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
@@ -24,7 +25,7 @@ const responsive = {
     slidesToSlide: 1,
   },
 };
-export default function Slider() {
+export default function Slider({products}) {
   return (
     <Carousel
       responsive={responsive}
@@ -34,48 +35,18 @@ export default function Slider() {
       draggable={true}
       keyBoardControl={true}
       removeArrowOnDeviceType={["tablet", "mobile"]}
-      itemClass="carousel-item-padding-40-px"
-      
+      itemClass="carousel-item-padding-40-px"  
     >
-      <div>
-        <Card />
-      </div>
-      <div>
-        <Card />
-      </div>
-      <div>
-        <Card />
-      </div>
-      <div>
-        <Card />
-      </div>
-      <div>
-        <Card />
-      </div>
-      <div>
-        <Card />
-      </div>
-      <div>
-        <Card />
-      </div>
-      <div>
-        <Card />
-      </div>
-      <div>
-        <Card />
-      </div>
-      <div>
-        <Card />
-      </div>
-      <div>
-        <Card />
-      </div>
-      <div>
-        <Card />
-      </div>
-      <div>
-        <Card />
-      </div>
+      {products && products.length > 0 ? (
+        products.map((product, index) => (
+          <div key={index} className="p-1">
+            <Card product={product} />
+          </div>
+        ))
+      ) : (
+        <p>No products available</p>
+      )}
+      
     </Carousel>
   );
 }

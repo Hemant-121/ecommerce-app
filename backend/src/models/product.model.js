@@ -15,11 +15,12 @@ const productSchema = new Schema(
       type: String,
       required: true,
     },
-
-    prodImage: {
-      type: String,
-      required: true,
-    },
+    prodImages: [
+      {
+        type: String,
+        required: true,
+      },
+    ],
     isStock: {
       type: Boolean,
       default: true,
@@ -36,22 +37,25 @@ const productSchema = new Schema(
         required: true,
       },
     ],
-    prodCategory: 
-        {
-          type: Schema.Types.ObjectId,
-          ref: "Category",
-        },
+    prodCategory: {
+      type: Schema.Types.ObjectId,
+      ref: "Category",
+    },
     brand:{
       type: String,
     },
-    keywords: {
-      type: [String]
-    },
+    keywords: [
+      {
+        type: String,
+        required: true,
+      },
+    ],
     attributes: {
-      type: {}
+      type: Map,
+      of: String,
     }
   },
   { timestamps: true }
 );
 
-export const Product = new mongoose.model("Product", productSchema);
+export const Product = mongoose.model("Product", productSchema);

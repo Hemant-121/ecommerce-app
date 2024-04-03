@@ -1,22 +1,18 @@
-
 // import './App.css'
 import { Outlet } from "react-router-dom";
 import Header from "./components/Header/Header";
 
-
 function App() {
-
   return (
-    <div className="h-full">
-    <div className="fixed top-0 w-full z-10">
-      <Header />
+    <div className="w-full">
+      <div className=" w-full top-0">
+        <Header />
+      </div>
+      <div className="top-50">
+        <Outlet />
+      </div>
     </div>
-    {/* <br /> */}
-    <div className="mt-20">
-      <Outlet />
-    </div>
-  </div>
-  )
+  );
 }
 
 export default App;

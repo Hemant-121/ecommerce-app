@@ -8,9 +8,11 @@ import Register from "./pages/Register.jsx";
 import Home from "./pages/Home.jsx";
 import { Toaster } from "react-hot-toast";
 import { Provider } from "react-redux";
-import store from "./redux-toolkit/store.js";
 import AuthLayout from "./components/AuthLayout.jsx";
 import AddProduct from "./pages/AddProduct.jsx";
+import { PersistGate } from 'redux-persist/integration/react';
+import { persistor, store } from './redux-toolkit/store.js'
+import ProductList from "./pages/ProductList.jsx";
 
 const router = createBrowserRouter([
   {
@@ -50,10 +52,18 @@ const router = createBrowserRouter([
         ),
       },
       {
+        path: "/my-product",
+        element: (
+          <AuthLayout authentication={true}>
+            <ProductList />
+          </AuthLayout>
+        ),
+      },
+      {
         path: "*",
         element: (
           <AuthLayout authentication={true}>
-            <Home />
+            <Home/>
           </AuthLayout>
         ),
       }
@@ -61,22 +71,15 @@ const router = createBrowserRouter([
   },
 ]);
 
-// const router = createBrowserRouter(
-//   createRoutesFromElements(
-//     <Route path='/' element={<App />}>
-//       <Route path='' element={<Home />} />
-//       <Route path='login'  element={<Login />} />
-//       <Route path='register' element={<Register />} />
-//     </Route>
-//   )
-// )
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <Provider store={store}>
+    <PersistGate loading={null} persistor={persistor}>
       <Toaster />
       <RouterProvider router={router} />
       <Toaster />
+      </PersistGate>
     </Provider>
   </React.StrictMode>
 );

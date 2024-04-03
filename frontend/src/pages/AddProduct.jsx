@@ -5,26 +5,53 @@ import { AddNewProduct } from "../services/ApiServices.js";
 const AddProduct = () => {
   const [formData, setFormData] = useState({
     prodName: "",
+    prodImages: [],
     prodPrice: "",
     prodDesc: "",
     category: "",
-    prodImage: "",
+    keywords: [],
+    brand: "",
+    attributes: {},
   });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
+    if (name === "attributes") {
+      // Check if the value is a valid JSON strin
+      const parsedValue = JSON.parse(value);
+      // Check if the parsed value is an object
+      if (typeof parsedValue === "object" && parsedValue !== null) {
+        setFormData((prevState) => ({
+          ...prevState,
+          [name]: parsedValue,
+        }));
+      }
+    } else {
+      setFormData((prevState) => ({
+        ...prevState,
+        [name]:
+          name === "prodImages" || name === "keywords"
+            ? value.split(",")
+            : value,
+      }));
+    }
   };
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.prodName || !formData.prodPrice || !formData.prodDesc || !formData.category || !formData.prodImage) {
-      toast.required("All fields are required");
-      return;
-    }
+    // if (
+    //   !formData.prodName ||
+    //   formData.prodImages.length === 0 ||
+    //   !formData.prodPrice ||
+    //   !formData.prodDesc ||
+    //   !formData.category ||
+    //   formData.keywords.length === 0 ||
+    //   !formData.brand ||
+    //   Object.keys(formData.attributes).length === 0 // Check if attributes object is empty
+    // ) {
+    //   toast.error("All fields are required");
+    //   return;
+    // }
 
     // Validate price as positive number
     const price = parseFloat(formData.prodPrice);
@@ -34,116 +61,148 @@ const AddProduct = () => {
     }
 
     const res = await AddNewProduct(formData);
-    if(res.data.success) {
+    if (res.data.success) {
       toast.success(res.data.message);
       setFormData({
         prodName: "",
+        prodImages: [],
         prodPrice: "",
         prodDesc: "",
         category: "",
-        prodImage: "",
+        keywords: [],
+        brand: "",
+        attributes: {},
       });
-    }else{
+    } else {
       toast.error(res.data.message);
     }
     console.log(formData);
-   
   };
 
   return (
-    <div className="h-[88vh] p-5 flex items-center justify-center overflow-auto bg-white">
-      <div className="container mx-auto max-w-md p-10 border rounded-lg text-sm bg-slate-200">
-      <h1 className=" flex items-center justify-center text-[2rem] mb-4 font-bold">
-          NewProduct
-        </h1>
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label
-              htmlFor="prodName"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Product Name
-            </label>
-            <input
-              type="text"
-              id="prodName"
-              name="prodName"
-              value={formData.prodName}
-              onChange={handleChange}
-              required
-              className="mt-1 p-2 block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
-            />
-          </div>
-          <div className="mb-4">
-            <label
-              htmlFor="prodPrice"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Product Price
-            </label>
-            <input
-              type="number"
-              id="prodPrice"
-              name="prodPrice"
-              value={formData.prodPrice}
-              onChange={handleChange}
-              required
-              className="mt-1 p-2 block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
-            />
-          </div>
-          <div className="mb-4">
-            <label
-              htmlFor="prodDesc"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Product Description
-            </label>
-            <textarea
-              id="prodDesc"
-              name="prodDesc"
-              value={formData.prodDesc}
-              onChange={handleChange}
-              required
-              className="mt-1 p-2 block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
-            />
-          </div>
-          <div className="mb-4">
-            <label
-              htmlFor="category"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Category
-            </label>
-            <input
-              type="text"
-              id="category"
-              name="category"
-              value={formData.category}
-              onChange={handleChange}
-              required
-              className="mt-1 p-2 block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
-            />
-          </div>
-          <div className="mb-4">
-            <label
-              htmlFor="prodImage"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Product Image URL
-            </label>
-            <input
-              type="url"
-              id="prodImage"
-              name="prodImage"
-              value={formData.prodImage}
-              onChange={handleChange}
-              required
-              className="mt-1 p-2 block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
-            />
+    <div className=" flex items-center justify-center bg-gray-50">
+      <div className="">
+        <h1 className="text-2xl font-bold text-center mb-8">New Product</h1>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label htmlFor="prodName" className="block text-gray-700">
+                Product Name
+              </label>
+              <input
+                type="text"
+                id="prodName"
+                name="prodName"
+                value={formData.prodName}
+                onChange={handleChange}
+                required
+                className="mt-1 p-2 w-full border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
+              />
+            </div>
+            <div>
+              <label htmlFor="prodPrice" className="block text-gray-700">
+                Product Price
+              </label>
+              <input
+                type="number"
+                id="prodPrice"
+                name="prodPrice"
+                value={formData.prodPrice}
+                onChange={handleChange}
+                required
+                className="mt-1 p-2 w-full border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
+              />
+            </div>
+            <div>
+              <label htmlFor="brand" className="block text-gray-700">
+                Brand
+              </label>
+              <input
+                type="text"
+                id="brand"
+                name="brand"
+                value={formData.brand}
+                onChange={handleChange}
+                required
+                className="mt-1 p-2 w-full border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
+              />
+            </div>
+            <div>
+              <label htmlFor="category" className="block text-gray-700">
+                Category
+              </label>
+              <input
+                type="text"
+                id="category"
+                name="category"
+                value={formData.category}
+                onChange={handleChange}
+                required
+                className="mt-1 p-2 w-full border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
+              />
+            </div>
+            <div className="col-span-2">
+              <label htmlFor="prodDesc" className="block text-gray-700">
+                Product Description
+              </label>
+              <textarea
+                id="prodDesc"
+                name="prodDesc"
+                value={formData.prodDesc}
+                onChange={handleChange}
+                required
+                rows="4"
+                className="mt-1 p-2 w-full border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
+              />
+            </div>
+            <div className="col-span-2">
+              <label htmlFor="prodImages" className="block text-gray-700">
+                Product Image URLs (comma-separated)
+              </label>
+              <textarea
+                id="prodImages"
+                name="prodImages"
+                value={formData.prodImages.join(",")}
+                onChange={handleChange}
+                required
+                rows="4"
+                className="mt-1 p-2 w-full border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
+              />
+            </div>
+            {/* <div className="grid grid-cols-2 gap-4"> */}
+            <div className="col-span-2">
+              <label htmlFor="attributes" className="block text-gray-700">
+                Attributes (JSON format)
+              </label>
+              <textarea
+                id="attributes"
+                name="attributes"
+                value={JSON.stringify(formData.attributes)} // Serialize the attributes object to JSON string
+                onChange={handleChange}
+                required
+                rows="4"
+                className="mt-1 p-2 w-full border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
+              />
+            </div>
+            {/* </div> */}
+            <div className="col-span-2">
+              <label htmlFor="keywords" className="block text-gray-700">
+                Keywords (comma-separated)
+              </label>
+              <input
+                type="text"
+                id="keywords"
+                name="keywords"
+                value={formData.keywords.join(",")}
+                onChange={handleChange}
+                required
+                className="mt-1 p-2 w-full border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
+              />
+            </div>
           </div>
           <button
             type="submit"
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            className="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-md w-full"
           >
             Add Product
           </button>
@@ -154,3 +213,7 @@ const AddProduct = () => {
 };
 
 export default AddProduct;
+
+/*
+https://rukminim2.flixcart.com/image/416/416/xif0q/mobile/d/a/i/-original-imagtc5fmmgmpswk.jpeg?q=70&crop=false,https://rukminim2.flixcart.com/image/416/416/xif0q/mobile/e/f/7/-original-imagtc5fhkhum3by.jpeg?q=70&crop=false,https://rukminim2.flixcart.com/image/416/416/xif0q/mobile/a/c/k/-original-imagtc5fuzkvczr7.jpeg?q=70&crop=false
+*/

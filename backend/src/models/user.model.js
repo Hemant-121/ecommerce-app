@@ -55,6 +55,12 @@ const userSchema = new Schema(
               ref: "Product",
             },
         ],
+        products: [
+            {
+              type: mongoose.Schema.Types.ObjectId,
+              ref: "Product",
+            },
+        ],
     },
     {
         timestamps: true 

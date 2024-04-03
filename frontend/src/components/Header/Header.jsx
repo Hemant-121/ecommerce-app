@@ -27,7 +27,7 @@ const Header = () => {
   };
 
   return (
-    <div className="navbar fixed  z-100 bg-blue-100 h-[8vh] p-3 flex items-center justify-evenly">
+    <div className="navbar  z-100 bg-blue-100 h-[8vh] p-3 flex items-center justify-evenly">
       <div className="flex">
         <Link className="btn btn-ghost lg:text-2xl sm:text-xl">
           Shopping-Cart
@@ -39,7 +39,7 @@ const Header = () => {
           <Link to="/add-product">
           <button className="btn btn-ghost">Add Product</button>
           </Link>
-          <Link to="/login">
+          <Link to="/my-product">
           <button className="btn btn-ghost">All Products</button>
           </Link>
           

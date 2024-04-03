@@ -1,21 +1,19 @@
 import {  useEffect } from 'react';
 import ListProduct from '../components/Home/ListProduct';
-import { getProductsForUser } from '../services/ApiServices'; // Import your API service functions
+import { getProductsForUser } from '../services/ApiServices'; 
 import { useSelector, useDispatch } from "react-redux";
 import { setSellerProducts } from '../redux-toolkit/sellerProductSlice';
 import toast from 'react-hot-toast';
 
-
 const ProductList = () => {
   const userId = useSelector((state) => state.auth.user._id);
+  const isSeller = useSelector((state) => state.auth.isSeller);
   const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-
-        // Fetch products from the backend
-        const response = await getProductsForUser(userId); // Assuming this function fetches products for the logged-in user
+        const response = await getProductsForUser(userId);
         
         dispatch(setSellerProducts(response.data))
       
@@ -25,18 +23,16 @@ const ProductList = () => {
     };
 
     fetchProducts();
-  }, []);
+  }, [dispatch, userId, isSeller]);
   
   const products = useSelector((state) => state.sellerProducts.sellerProducts);
 
   return (
-    <div className='w-[60vw] mx-auto'>
+    <div className='w-[60vw] mx-auto mt-4'>
       {products.map((product, index) => (
         <div key={index}>
           <ListProduct
             product={product}
-            // onUpdate={() => handleUpdate(product.id)}
-            // onDelete={() => handleDelete(product.id)}
           />
         </div>
       ))}

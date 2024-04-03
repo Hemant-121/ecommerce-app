@@ -4,6 +4,7 @@ import { userLogin } from "../services/ApiServices";
 import toast from "react-hot-toast";
 import { setUser } from "../redux-toolkit/authSlice";
 import { useDispatch } from 'react-redux';
+import { setProducts } from "../redux-toolkit/productSlice";
 
 
 const Login = () => {
@@ -21,12 +22,12 @@ const Login = () => {
       [name]: value,
     });
   };
-
+  dispatch(setProducts())
+  
   const handleSubmit = async (e) => {
     console.log(formData);
     e.preventDefault();
     console.log(formData);
-  
     const response = await userLogin(formData);
     // console.log(response)
     if (!response.data.success) {

@@ -2,7 +2,7 @@
 
 const ListProduct = ({ product }) => {
   return (
-    <div className="flex items-center justify-between border p-4 mb-4 w-full h-[30vh] overflow-hidden">
+    <div className="flex items-center justify-between border p-4 mb-4 w-full h-[30vh] overflow-hidden bg-white">
       {/* Product Image */}
       <div className="h-[250px] carousel carousel-vertical rounded-box">
           {
@@ -12,7 +12,7 @@ const ListProduct = ({ product }) => {
                   <img
                     src={image}
                     alt={product.prodName}
-                    className="w-full h-[250px] transition-transform transform hover:scale-105 p-5"
+                    className="w-[250PX] h-[250px] transition-transform transform hover:scale-105 p-5"
                   />
                 </div>
               );
@@ -23,8 +23,7 @@ const ListProduct = ({ product }) => {
       {/* Product Details */}
       <div className="w-1/2 mx-4">
         <h2 className="text-xl font-bold">{product.prodName}</h2>
-        <p className="text-gray-700 mb-2">${product.prodPrice}</p>
-        <p className="text-gray-600">{product.prodDesc}</p>
+        <p className="text-gray-700 mb-2">₹ {product.prodPrice}</p>
       </div>
 
       {/* Update and Delete Buttons */}

@@ -2,19 +2,24 @@ import { useEffect } from "react";
 import Carousal from "../components/Home/Carousal";
 import Slider from "../components/Home/Slider";
 import {  useDispatch, useSelector } from 'react-redux';
-import { setProducts } from '../redux-toolkit/productSlice';
+import { setAllProducts } from '../redux-toolkit/productSlice';
 import { getProducts } from "../services/ApiServices.js";
+import { setSellerProd } from "../redux-toolkit/sellerProductSlice.js";
 
 const Home = () => {
   const dispatch = useDispatch();
   const { products } = useSelector((state)=> state.products);
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         // Fetch products data from the backend
-        const fetchedProducts = await getProducts();
+        const response = await getProducts();
         // Dispatch the action to set products in Redux store
-        dispatch(setProducts(fetchedProducts.data));
+        dispatch(setAllProducts(response.data));
+
+        dispatch(setSellerProd())
+        
       } catch (error) {
         console.error('Error fetching products:', error);
       }

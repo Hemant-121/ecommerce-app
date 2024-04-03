@@ -3,30 +3,18 @@ import toast from "react-hot-toast";
 import { AddNewProduct } from "../services/ApiServices.js";
 
 const AddProduct = () => {
-  const [formData, setFormData] = useState({
-    prodName: "",
-    prodImages: [],
-    prodPrice: "",
-    prodDesc: "",
-    category: "",
-    keywords: [],
-    brand: "",
-    attributes: {},
-  });
+          const [formData, setFormData] = useState({
+            prodName: "",
+            prodImages: [],
+            prodPrice: "",
+            prodDesc: "",
+            category: "",
+            keywords: [],
+            brand: "",
+          });
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    if (name === "attributes") {
-      // Check if the value is a valid JSON strin
-      const parsedValue = JSON.parse(value);
-      // Check if the parsed value is an object
-      if (typeof parsedValue === "object" && parsedValue !== null) {
-        setFormData((prevState) => ({
-          ...prevState,
-          [name]: parsedValue,
-        }));
-      }
-    } else {
+      const { name, value } = e.target;
       setFormData((prevState) => ({
         ...prevState,
         [name]:
@@ -35,23 +23,22 @@ const AddProduct = () => {
             : value,
       }));
     }
-  };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // if (
-    //   !formData.prodName ||
-    //   formData.prodImages.length === 0 ||
-    //   !formData.prodPrice ||
-    //   !formData.prodDesc ||
-    //   !formData.category ||
-    //   formData.keywords.length === 0 ||
-    //   !formData.brand ||
-    //   Object.keys(formData.attributes).length === 0 // Check if attributes object is empty
-    // ) {
-    //   toast.error("All fields are required");
-    //   return;
-    // }
+    if (
+      !formData.prodName ||
+      formData.prodImages.length === 0 ||
+      !formData.prodPrice ||
+      !formData.prodDesc ||
+      !formData.category ||
+      formData.keywords.length === 0 ||
+      !formData.brand
+    ) {
+      toast.error("All fields are required");
+      return;
+    }
 
     // Validate price as positive number
     const price = parseFloat(formData.prodPrice);
@@ -79,7 +66,7 @@ const AddProduct = () => {
     console.log(formData);
   };
 
-  return (
+  return (<>
     <div className=" flex items-center justify-center bg-gray-50">
       <div className="">
         <h1 className="text-2xl font-bold text-center mb-8">New Product</h1>
@@ -169,22 +156,7 @@ const AddProduct = () => {
                 className="mt-1 p-2 w-full border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
               />
             </div>
-            {/* <div className="grid grid-cols-2 gap-4"> */}
-            <div className="col-span-2">
-              <label htmlFor="attributes" className="block text-gray-700">
-                Attributes (JSON format)
-              </label>
-              <textarea
-                id="attributes"
-                name="attributes"
-                value={JSON.stringify(formData.attributes)} // Serialize the attributes object to JSON string
-                onChange={handleChange}
-                required
-                rows="4"
-                className="mt-1 p-2 w-full border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
-              />
-            </div>
-            {/* </div> */}
+            
             <div className="col-span-2">
               <label htmlFor="keywords" className="block text-gray-700">
                 Keywords (comma-separated)
@@ -209,11 +181,8 @@ const AddProduct = () => {
         </form>
       </div>
     </div>
+    </>
   );
 };
 
 export default AddProduct;
-
-/*
-https://rukminim2.flixcart.com/image/416/416/xif0q/mobile/d/a/i/-original-imagtc5fmmgmpswk.jpeg?q=70&crop=false,https://rukminim2.flixcart.com/image/416/416/xif0q/mobile/e/f/7/-original-imagtc5fhkhum3by.jpeg?q=70&crop=false,https://rukminim2.flixcart.com/image/416/416/xif0q/mobile/a/c/k/-original-imagtc5fuzkvczr7.jpeg?q=70&crop=false
-*/

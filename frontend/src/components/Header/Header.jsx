@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../../redux-toolkit/authSlice";
 import toast from "react-hot-toast";
 import { userLogout } from "../../services/ApiServices";
+import { setSellerProd } from "../../redux-toolkit/sellerProductSlice";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -20,6 +21,7 @@ const Header = () => {
         navigate("/login");
       }
       dispatch(logout());
+      dispatch(setSellerProd());
     } catch (error) {
       console.error("Logout error:", error);
       toast.error("Failed to log out");

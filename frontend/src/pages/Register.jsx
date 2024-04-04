@@ -86,14 +86,9 @@ const Register = () => {
         </h1>
         <form onSubmit={handleSubmit}>
           <div className="mb-2">
-            <label
-              htmlFor="fullName"
-              className="block text-gray-700 font-bold mb-1"
-            >
-              Name:
-            </label>
             <input
               type="text"
+              placeholder="Name"
               id="fullName"
               name="fullName"
               value={formData.fullName}
@@ -103,15 +98,11 @@ const Register = () => {
             />
           </div>
           <div className="mb-2">
-            <label
-              htmlFor="email"
-              className="block text-gray-700 font-bold mb-1"
-            >
-              Email:
-            </label>
+            
             <input
               type="email"
               id="email"
+              placeholder="Enter your email"
               name="email"
               value={formData.email}
               onChange={handleChange}
@@ -121,18 +112,13 @@ const Register = () => {
             />
           </div>
           <div className="mb-2">
-            <label
-              htmlFor="password"
-              className="block text-gray-700 font-bold mb-1"
-            >
-              Password:
-            </label>
 
             <div className="flex w-full px-3 py-2 border rounded-md justify-between bg-white">
               <input
                 type={formData.showPassword ? "text" : "password"}
                 id="password"
                 name="password"
+                placeholder="Password"
                 value={formData.password}
                 onChange={handleChange}
                 className="w-full outline:none focus:outline-none bg-white"
@@ -145,14 +131,10 @@ const Register = () => {
           </div>
 
           <div className="mb-2">
-            <label
-              htmlFor="confirmPassword"
-              className="block text-gray-700 font-bold mb-1"
-            >
-              Confirm Password:
-            </label>
+            
             <input
               type="password"
+              placeholder="Confirm Password"
               id="confirmPassword"
               name="confirmPassword"
               value={formData.confirmPassword}

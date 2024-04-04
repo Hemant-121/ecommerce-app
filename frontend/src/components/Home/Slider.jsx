@@ -31,7 +31,7 @@ export default function Slider({products}) {
       responsive={responsive}
       swipeable={true}
       autoPlaySpeed={1000}
-      transitionDuration={1000}
+      transitionDuration={100}
       draggable={true}
       keyBoardControl={true}
       removeArrowOnDeviceType={["tablet", "mobile"]}

@@ -31,7 +31,7 @@ const Home = () => {
   
   return (
     <div className="h-[92vh] ">
-      <div className="flex flex-col gap-3 mx-4">
+      <div className="flex flex-col gap-3 mx-4 mt-3">
         <Carousal />
       </div>
       <div className="flex flex-col gap-3 mx-4 mb-4   pb-4 bg-white">

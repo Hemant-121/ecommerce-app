@@ -16,7 +16,7 @@ const Header = () => {
     try {
       const res = await userLogout();
       console.log(res.data);
-      if(res.data.success) {
+      if (res.data.success) {
         toast.success(res.data.message);
         navigate("/login");
       }
@@ -29,22 +29,22 @@ const Header = () => {
   };
 
   return (
-    <div className="navbar  z-100 bg-blue-100 h-[8vh] p-3 flex items-center justify-evenly">
+    <>
+    <div className="navbar fixed z-50 bg-blue-100 h-[8vh] p-3 flex items-center justify-evenly">
       <div className="flex">
-        <Link className="btn btn-ghost lg:text-2xl sm:text-xl">
-          Shopping-Cart
+        <Link className="btn btn-ghost lg:text-2xl sm:text-xl text-blue-600 font-extrabold">
+          FlipMart
         </Link>
       </div>
 
       {isAuthenticated && isSeller ? (
         <div className="flex gap-2">
           <Link to="/add-product">
-          <button className="btn btn-ghost">Add Product</button>
+            <button className="btn btn-ghost">Add Product</button>
           </Link>
           <Link to="/my-product">
-          <button className="btn btn-ghost">All Products</button>
+            <button className="btn btn-ghost">All Products</button>
           </Link>
-          
         </div>
       ) : null}
       <div className="flex gap-2">
@@ -55,7 +55,7 @@ const Header = () => {
             placeholder="Search"
             id="search"
             name="search"
-            className="input input-bordered w-24 md:w-auto"
+            className="input input-bordered w-24 md:w-auto bg-blue-100 focus:outline-none"
           />
         </div>
 
@@ -143,6 +143,10 @@ const Header = () => {
         </div>
       </div>
     </div>
+    <div className="navbar  bg-blue-100 h-[8vh] p-3 flex items-center justify-evenly">
+
+    </div>
+    </>
   );
 };
 

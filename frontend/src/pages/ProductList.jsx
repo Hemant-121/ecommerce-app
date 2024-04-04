@@ -1,11 +1,12 @@
 import {  useEffect } from 'react';
 import ListProduct from '../components/Home/ListProduct';
-import { getProductsForUser } from '../services/ApiServices'; 
+import { deleteProduct, getProductsForUser } from '../services/ApiServices'; 
 import { useSelector, useDispatch } from "react-redux";
 import { setSellerProducts } from '../redux-toolkit/sellerProductSlice';
 import toast from 'react-hot-toast';
 
 const ProductList = () => {
+  
   const userId = useSelector((state) => state.auth.user._id);
   const isSeller = useSelector((state) => state.auth.isSeller);
   const dispatch = useDispatch();
@@ -33,6 +34,7 @@ const ProductList = () => {
         <div key={index}>
           <ListProduct
             product={product}
+            deleteProduct = {deleteProduct}
           />
         </div>
       ))}

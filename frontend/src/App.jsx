@@ -8,7 +8,7 @@ function App() {
       <div className=" w-full top-0">
         <Header />
       </div>
-      <div className="top-50">
+      <div >
         <Outlet />
       </div>
     </div>

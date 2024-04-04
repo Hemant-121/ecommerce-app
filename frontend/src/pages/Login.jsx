@@ -43,17 +43,12 @@ const Login = () => {
 
   return (
     <div className="  h-[88vh] p-5 flex items-center justify-center">
-      <div className="container mx-auto max-w-md p-10  rounded bg-slate-200">
+      <div className="container mx-auto max-w-md px-10 py-20 rounded bg-slate-200">
         <h2 className=" flex items-center justify-center text-[2rem] mb-4 font-bold ">Login</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label
-              htmlFor="email"
-              className="block text-gray-700 font-bold mb-2"
-            >
-              Email:
-            </label>
             <input
+            placeholder="Email"
               type="email"
               id="email"
               name="email"
@@ -64,13 +59,8 @@ const Login = () => {
             />
           </div>
           <div className="mb-4">
-            <label
-              htmlFor="password"
-              className="block text-gray-700 font-bold mb-2"
-            >
-              Password:
-            </label>
             <input
+            placeholder="Password"
               type="password"
               id="password"
               name="password"

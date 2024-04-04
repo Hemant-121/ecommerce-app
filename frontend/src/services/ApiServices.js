@@ -52,19 +52,43 @@ export const getProducts = async () => {
         console.log('Error while calling Signup API: ', error);
     }
 }
-export const getProductsForUser = async ({id}) => {
+export const getProductsForUser = async (id) => {
     try {
         return await axiosInstance.get(`/product/user-product/${id}`)
     } catch (error) {
         console.log('Error while calling Signup API: ', error);
     }
 }
-export const deleteProduct = async ({id}) => {
+export const deleteProduct = async (id) => {
+    console.log(id)
     try {
-        return await axiosInstance.get(`/product/delete-product/${id}`)
+        return await axiosInstance.delete(`/product/delete-product/${id}`)
     } catch (error) {
         console.log('Error while calling Signup API: ', error);
     }
 }
+
+export const getProductById = async (productId) => {
+    try {
+        return await axiosInstance.get(`/product/get-product/${productId}`)
+    } catch (error) {
+      console.log("Error while getting product")
+    }
+  };
+export const getCategory = async (categoryId) => {
+    try {
+        return await axiosInstance.get(`/product/get-category/${categoryId}`)
+    } catch (error) {
+      console.log("Error while getting category")
+    }
+  };
+  
+  export const updateProduct = async (productId, productData) => {
+    try {
+        return await axiosInstance.put(`/product/update-product/${productId}`, productData)
+    } catch (error) {
+        console.log("Error while updating product")
+    }
+  };
 
 export default axiosInstance;

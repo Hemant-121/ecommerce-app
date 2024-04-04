@@ -1,76 +1,76 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
-import { AddNewProduct } from "../services/ApiServices.js";
+import { useNavigate, useParams } from "react-router-dom";
+import { getProductById, updateProduct, getCategory} from "../services/ApiServices.js";
 
-const AddProduct = () => {
-          const [formData, setFormData] = useState({
-            prodName: "",
-            prodImages: [],
-            prodPrice: "",
-            prodDesc: "",
-            category: "",
-            keywords: [],
-            brand: "",
-          });
+const EditProductPage = () => {
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const [formData, setFormData] = useState({
+    prodName: "",
+    prodImages: [],
+    prodPrice: "",
+    prodDesc: "",
+    prodCategory: "",
+    keywords: [],
+    brand: "",
+  });
 
+  useEffect(() => {
+    const fetchProductData = async () => {
+      try {
+        const response = await getProductById(id);
+        let { prodName, prodImages, prodPrice, prodDesc, prodCategory, keywords, brand } = response.data.data;
+        const res = await getCategory(prodCategory);
+        const { name } = res.data.data;
+        prodCategory = name;
+        setFormData({
+          prodName,
+          prodImages,
+          prodPrice,
+          prodDesc,
+          prodCategory,
+          keywords,
+          brand,
+        });
+      } catch (error) {
+        console.error("Error fetching product data:", error);
+        toast.error("Failed to fetch product data");
+      }
+    };
+    fetchProductData();
+  }, [id]);
+  
   const handleChange = (e) => {
-      const { name, value } = e.target;
-      setFormData((prevState) => ({
-        ...prevState,
-        [name]:
-          name === "prodImages" || name === "keywords"
-            ? value.split(",")
-            : value,
-      }));
-    }
-
-
+    const { name, value } = e.target;
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: name === "prodImages" || name === "keywords" ? value.split(",") : value,
+    }));
+  };
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (
-      !formData.prodName ||
-      formData.prodImages.length === 0 ||
-      !formData.prodPrice ||
-      !formData.prodDesc ||
-      !formData.category ||
-      formData.keywords.length === 0 ||
-      !formData.brand
-    ) {
-      toast.error("All fields are required");
-      return;
+    try {
+      const res = await updateProduct(id, formData);
+      if (res.data.success) {
+        toast.success(res.data.message);
+        navigate('/my-product')
+      } else {
+        toast.error(res.data.message);
+      }
+    } catch (error) {
+      console.error("Error updating product:", error);
+      toast.error("Failed to update product");
     }
-
-    // Validate price as positive number
-    const price = parseFloat(formData.prodPrice);
-    if (isNaN(price) || price <= 0) {
-      toast.error("Price must be a positive number");
-      return;
-    }
-
-    const res = await AddNewProduct(formData);
-    if (res.data.success) {
-      toast.success(res.data.message);
-      setFormData({
-        prodName: "",
-        prodImages: [],
-        prodPrice: "",
-        prodDesc: "",
-        category: "",
-        keywords: [],
-        brand: "",
-        attributes: {},
-      });
-    } else {
-      toast.error(res.data.message);
-    }
-    console.log(formData);
   };
 
-  return (<>
-    <div className=" flex items-center justify-center  min-h-[91.7vh]">
-      <div className=" border border-gray-300 py-10 px-10 bg-slate-400 rounded-lg min-w-[50vw]" >
-        <h1 className="text-2xl font-bold text-center mb-8">New Product</h1>
-        <form onSubmit={handleSubmit} className="space-y-4">
+  return (
+    <>
+      <div className=" flex items-center justify-center  min-h-[91.7vh]">
+        <div className=" border border-gray-300 py-10 px-10 bg-slate-400 rounded-lg min-w-[50vw]">
+          <h1 className="text-2xl font-bold text-center mb-8">Edit Product</h1>
+          <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label htmlFor="prodName" className="block text-gray-700">
@@ -117,15 +117,15 @@ const AddProduct = () => {
               />
             </div>
             <div>
-              <label htmlFor="category" className="block text-gray-700">
+              <label htmlFor="prodCategory" className="block text-gray-700">
                 
               </label>
               <input
-              placeholder="Category"
+              placeholder="prodCategory"
                 type="text"
-                id="category"
-                name="category"
-                value={formData.category}
+                id="prodCategory"
+                name="prodCategory"
+                value={formData.prodCategory}
                 onChange={handleChange}
                 required
                 className="mt-1 p-2 w-full border border-gray-300 bg-blue-100 rounded-md focus:outline-none focus:border-indigo-500"
@@ -184,16 +184,11 @@ const AddProduct = () => {
           >
             Submit
           </button>
-        </form>
+          </form>
+        </div>
       </div>
-    </div>
     </>
   );
 };
 
-export default AddProduct;
-
-
-
-
-
+export default EditProductPage;

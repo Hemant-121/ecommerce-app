@@ -98,13 +98,60 @@ export const getCategory = async (categoryId) => {
         console.log("Error while adding to wishlist product")
     }
   };
+  
+//   export const addToCart = async (productId) => {
+//     try {
+//         return await axiosInstance.post(`/product/addToCart/${productId}`)
+//     } catch (error) {
+//         console.log("Error while adding product in cart")
+//     }
+//   };
 
-  export const checkIfLiked = async (productId) => {
+//   export const getCartProducts = async (cart) => {
+//     try {
+//         return await axiosInstance.post(`/product/cart-products`, cart)
+//     } catch (error) {
+//         console.log("Error while adding product in cart")
+//     }
+//   };
+
+
+
+export const addToCart = async (productId) => {
     try {
-        return await axiosInstance.post(`/product/isLiked/${productId}`)
+        return await axiosInstance.post(`/product/addToCart/${productId}`);
     } catch (error) {
-        console.log("Error while getting the liked status", error)
+        console.error("Error while adding product to cart:", error);
+        throw error; // Re-throw the error to handle it in the calling code
     }
-  };
+};
+
+export const getCartProducts = async () => {
+    try {
+        return await axiosInstance.get(`/product/cartProducts`);
+    } catch (error) {
+        console.error("Error while fetching cart products:", error);
+        throw error;
+    }
+};
+
+export const removeFromCart = async (productId) => {
+    try {
+        return await axiosInstance.delete(`/product/removeFromCart/${productId}`);
+    } catch (error) {
+        console.error("Error while removing product from cart:", error);
+        throw error;
+    }
+};
+export const updateProductQuantity = async (data) => {
+    try {
+        return await axiosInstance.post(`/product/update-quantity`, data);
+    } catch (error) {
+        console.error("Error while removing product from cart:", error);
+        throw error;
+    }
+};
+
+
 
 export default axiosInstance;

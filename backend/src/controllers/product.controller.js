@@ -165,4 +165,115 @@ const isLiked = asyncHandler(async(req, res) => {
     return res.status(200).json(false)
 })
 
-export { addProduct, getProducts, selllerProducts, getProduct, updateProduct, getCategory, deleteProduct, addToWishlist, isLiked };
+// const addToCart = asyncHandler(async(req, res) => {
+//     let {id} =  req.params;
+//     let user = req.user;
+//     let inCart = user.cart.includes(id);
+//     if(inCart){
+//         await User.findByIdAndUpdate(req.user._id , {$pull: {cart : id} })
+//     }else{
+//         await User.findByIdAndUpdate(req.user._id , {$addToSet: {cart : id} })
+//     }
+//     return res.status(200).json(new ApiResponse(200, {}, "Ok"))
+// })
+// const cartProducts = asyncHandler(async(req, res) => { 
+//     const cart = req.body
+//     const products = await Product.find({ _id: { $in: cart } });
+//     return res.status(200).json(new ApiResponse(200, products, "Ok"))
+// })
+
+const addToCart = asyncHandler(async(req, res) => {
+    const productId = req.params.id;
+    const userId = req.user._id;
+
+    // Check if the product already exists in the user's cart
+    const user = await User.findById(userId);
+    const existingProductIndex = user.cart.findIndex(item => item.product.equals(productId));
+
+    if (existingProductIndex !== -1) {
+        // If product exists, increment its quantity
+        user.cart[existingProductIndex].quantity++;
+    } else {
+        // If product does not exist, add it to the cart with quantity 1
+        user.cart.push({ product: productId, quantity: 1 });
+    }
+
+    await user.save();
+
+    return res.status(200).json(new ApiResponse(200, {}, "Product added to cart successfully"));
+});
+
+const cartProducts = async (req, res) => {
+    try {
+        const { cart } = req.user;
+
+        // Fetch products based on the IDs in the user's cart
+        const productsWithQuantity = await Promise.all(cart.map(async cartItem => {
+            const product = await Product.findById(cartItem.product);
+            if (!product) {
+                return null; // Handle case where product is not found
+            }
+            return {
+                ...product.toObject(),
+                quantity: cartItem.quantity
+            };
+        }));
+
+        // Filter out null values (products not found)
+        const validProducts = productsWithQuantity.filter(product => product !== null);
+
+        return res.status(200).json(new ApiResponse(200, validProducts, "Products from cart successfully fetched"));
+    } catch (error) {
+        console.error("Error fetching cart products:", error);
+        return res.status(500).json({ message: 'Could not fetch cart products', error: error.message });
+    }
+};
+
+
+
+const removeFromCart = asyncHandler(async(req, res) => {
+    const productId = req.params.id;
+    const userId = req.user._id;
+
+    // Find the user by ID
+    const user = await User.findById(userId);
+
+    // Find the index of the product in the user's cart
+    const index = user.cart.findIndex(item => item.product.equals(productId));
+
+    if (index !== -1) {
+        // If the product is found, remove it from the cart
+        user.cart.splice(index, 1);
+        await user.save();
+        return res.status(200).json(new ApiResponse(200, {}, "Product removed from cart successfully"));
+    } else {
+        // If the product is not found in the cart, return an error response
+        return res.status(404).json(new ApiResponse(404, {}, "Product not found in cart"));
+    }
+});
+
+
+// Controller to update the quantity of a product in the user's cart
+const updateCartProductQuantity = asyncHandler(async (req, res) => {
+    try {
+      const { productId, quantity } = req.body; // Assuming productId and quantity are sent in the request body
+  
+      // Find the user by ID and update the quantity of the specified product in the cart
+      const user = await User.findById(req.user._id);
+      const cartProductIndex = user.cart.findIndex(item => item.product.toString() === productId);
+      if (cartProductIndex !== -1) {
+        user.cart[cartProductIndex].quantity = quantity;
+        await user.save();
+  
+        return res.status(200).json(new ApiResponse(200, {}, 'Cart product quantity updated successfully'));
+      } else {
+        return res.status(404).json(new ApiResponse(404, {}, 'Product not found in cart'));
+      }
+    } catch (error) {
+      console.error('Error updating cart product quantity:', error);
+      return res.status(500).json(new ApiResponse(500, {}, 'Internal server error'));
+    }
+  });
+
+
+export { addProduct, getProducts, selllerProducts, getProduct, updateProduct, getCategory, deleteProduct, addToWishlist, isLiked, addToCart, cartProducts, removeFromCart, updateCartProductQuantity };

@@ -17,6 +17,7 @@ import EditProductPage from "./pages/EditProductPage.jsx";
 import ProductDetailPage from "./pages/ProductDetailPage.jsx";
 import WishList from "./pages/WishList.jsx";
 import UserProfilePage from "./pages/UserProfilePage.jsx";
+import Cart from "./pages/Cart.jsx";
 
 const router = createBrowserRouter([
   {
@@ -82,6 +83,14 @@ const router = createBrowserRouter([
         element: (
           <AuthLayout authentication={true}>
             <WishList/>
+          </AuthLayout>
+        ),
+      },
+      {
+        path: "/cart",
+        element: (
+          <AuthLayout authentication={true}>
+            <Cart/>
           </AuthLayout>
         ),
       },

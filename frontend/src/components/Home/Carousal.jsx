@@ -24,8 +24,9 @@ const Carousal = () => {
       transitionDuration={100}
       autoPlay={true}
       keyBoardControl={true}
-      // removeArrowOnDeviceType={["tablet", "mobile", "desktop"]}
-      removeArrowOnDeviceType={false}
+      removeArrowOnDeviceType={["tablet", "mobile"]}
+      
+      // removeArrowOnDeviceType={false}
       showDots={true}
       swipeable={true}
       draggable={true}

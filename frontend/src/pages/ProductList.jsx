@@ -7,8 +7,8 @@ import toast from 'react-hot-toast';
 
 const ProductList = () => {
   
-  const userId = useSelector((state) => state.auth.user._id);
-  const isSeller = useSelector((state) => state.auth.isSeller);
+  const userId = useSelector((state) => state?.auth?.user?._id);
+  const isSeller = useSelector((state) => state?.auth?.isSeller);
   const dispatch = useDispatch();
 
   useEffect(() => {

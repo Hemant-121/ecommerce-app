@@ -12,7 +12,7 @@ const Card = ({ product }) => {
                 <img
                   src={image}
                   alt='image'
-                  className="w-full h-[250px] transition-transform transform hover:scale-105 p-4"
+                  className="max-w-full h-[250px] transition-transform transform hover:scale-105 p-4 mx-auto"
                 />
               </div>
             );

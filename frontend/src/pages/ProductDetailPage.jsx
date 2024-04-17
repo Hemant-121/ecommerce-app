@@ -1,10 +1,15 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { getProductById, likeProduct, getCurrentUser } from "../services/ApiServices"; // Assume you have a function checkIfLiked to verify if the product is already liked
+import { Link, useParams } from "react-router-dom";
+import {
+  getProductById,
+  likeProduct,
+  getCurrentUser,
+  addToCart,
+} from "../services/ApiServices"; // Assume you have a function checkIfLiked to verify if the product is already liked
 import toast from "react-hot-toast";
 import { FiHeart } from "react-icons/fi";
 import { FaHeart } from "react-icons/fa";
-import { useDispatch, useSelector } from 'react-redux';
+import {useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { updateUser } from "../redux-toolkit/authSlice";
 
@@ -14,19 +19,22 @@ const ProductDetailPage = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [loader, setLoader] = useState(false);
-  const { isAuthenticated } = useSelector(state => state.auth);
-  const wishList = useSelector(state => state.auth.user?.wishList)
-  
+  const { isAuthenticated } = useSelector((state) => state.auth);
+  const wishList = useSelector((state) => state.auth.user?.wishList);
+  const cart = useSelector((state) => state.auth.user?.cart);
+
   const [isLiked, setIsLiked] = useState(wishList?.includes(id));
+  const [addedToCart, setAddedToCart] = useState(cart?.includes(id));
+
   const fetchUser = async () => {
     try {
-     const response = await getCurrentUser();
-     console.log("User current", response.data.data)
-     dispatch(updateUser(response.data.data))
+      const response = await getCurrentUser();
+      console.log("User current", response.data.data);
+      dispatch(updateUser(response.data.data));
     } catch (error) {
-     console.error("Error fetching user data:", error);
+      console.error("Error fetching user data:", error);
     }
-   }
+  };
 
   useEffect(() => {
     const fetchProductData = async () => {
@@ -34,7 +42,6 @@ const ProductDetailPage = () => {
         const response = await getProductById(id);
         const { data } = response.data;
         setProduct(data);
-        
       } catch (error) {
         console.error("Error fetching product data:", error);
         toast.error("Failed to fetch product data");
@@ -43,25 +50,33 @@ const ProductDetailPage = () => {
     fetchProductData();
   }, [isLiked, id]);
 
-
   const handleLike = async (e) => {
     e.preventDefault();
     if (!isAuthenticated) {
-      navigate('/login');
+      navigate("/login");
       return;
     }
-    try { 
+    try {
       const response = await likeProduct(id);
       console.log(response);
       setIsLiked(!isLiked);
       toast.success(isLiked ? "Dishliked successfully" : "Liked successfully");
       fetchUser();
-    
     } catch (error) {
       console.log("Error while liking the product", error);
     } finally {
       setLoader(false);
     }
+  };
+
+  const handleAddToCart = async () => {
+    if (!isAuthenticated) {
+      navigate("/login");
+      return;
+    }
+    await addToCart(id)
+    fetchUser();
+    setAddedToCart(true);
   };
 
   return (
@@ -76,8 +91,15 @@ const ProductDetailPage = () => {
                     key={index}
                     className="carousel-item w-full h-[50vh] flex items-center justify-center py-2 pt-1"
                   >
-                    <div className="fixed top-2 right-2 z-50 cursor-pointer" onClick={handleLike}>
-                      {isLiked ? (<FaHeart size={24} color="red" />) : (<FiHeart size={24} color="gray" />)}
+                    <div
+                      className="fixed top-2 right-2 z-50 cursor-pointer"
+                      onClick={handleLike}
+                    >
+                      {isLiked ? (
+                        <FaHeart size={24} color="red" />
+                      ) : (
+                        <FiHeart size={24} color="gray" />
+                      )}
                     </div>
                     <img
                       src={image}
@@ -88,15 +110,33 @@ const ProductDetailPage = () => {
                 ))}
               </div>
               <div className="absolute bottom-0 w-full  flex justify-between pb-2 px-2">
-                <button className="btn w-1/2 rounded-none bg-[#ff9f00] hover:bg-[#ff9f00]">Add to Cart</button>
-                <button className="btn w-1/2 rounded-none bg-[#fb641b] hover:bg-[#fb641b]">Buy Now</button>
+                {!addedToCart ? (
+                  <button
+                    className="btn w-1/2 rounded-none bg-[#ff9f00] hover:bg-[#ff9f00]"
+                    onClick={handleAddToCart}
+                  >
+                    Add to Cart
+                  </button>
+                ) : (
+                  <Link to={'/cart'}
+                    className="btn w-1/2 rounded-none bg-[#ff9f00] hover:bg-[#ff9f00]"
+                  >
+                    Go to Cart
+                  </Link>
+                )}
+
+                <button className="btn w-1/2 rounded-none bg-[#fb641b] hover:bg-[#fb641b]">
+                  Buy Now
+                </button>
               </div>
             </div>
           </div>
 
           <div className="w-[70%] md:pl-5">
             <div className="mb-4">
-              <h2 className="text-3xl font-semibold mb-2">{product.prodName}</h2>
+              <h2 className="text-3xl font-semibold mb-2">
+                {product.prodName}
+              </h2>
               <p className="text-green-500 mb-4 text-3xl">
                 <span className="text-green-500">₹ {product.prodPrice}</span>
               </p>
@@ -111,4 +151,5 @@ const ProductDetailPage = () => {
     </>
   );
 };
+
 export default ProductDetailPage;

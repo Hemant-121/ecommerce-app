@@ -14,6 +14,9 @@ import { PersistGate } from 'redux-persist/integration/react';
 import { persistor, store } from './redux-toolkit/store.js'
 import ProductList from "./pages/ProductList.jsx";
 import EditProductPage from "./pages/EditProductPage.jsx";
+import ProductDetailPage from "./pages/ProductDetailPage.jsx";
+import WishList from "./pages/WishList.jsx";
+import UserProfilePage from "./pages/UserProfilePage.jsx";
 
 const router = createBrowserRouter([
   {
@@ -65,6 +68,28 @@ const router = createBrowserRouter([
         element: (
           <AuthLayout authentication={true}>
             <EditProductPage/>
+          </AuthLayout>
+        ),
+      },
+      {
+        path: "/product-detail/:id",
+        element: (
+            <ProductDetailPage/>
+        ),
+      },
+      {
+        path: "/wishlist",
+        element: (
+          <AuthLayout authentication={true}>
+            <WishList/>
+          </AuthLayout>
+        ),
+      },
+      {
+        path: "/user-profile",
+        element: (
+          <AuthLayout authentication={true}>
+            <UserProfilePage/>
           </AuthLayout>
         ),
       },

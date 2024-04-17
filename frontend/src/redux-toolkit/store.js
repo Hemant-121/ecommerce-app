@@ -10,7 +10,7 @@ import sellerProductSlice from './sellerProductSlice';
 const rootReducer = combineReducers({
   auth: authSlice,
   products: productSlice,
-  sellerProducts: sellerProductSlice
+  sellerProducts: sellerProductSlice,
 });
 
 const persistConfig = {

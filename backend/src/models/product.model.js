@@ -11,10 +11,7 @@ const productSchema = new Schema(
       min: 0,
       required: true,
     },
-    prodDesc: {
-      type: String,
-      required: true,
-    },
+    prodDesc: String,
     prodImages: [
       {
         type: String,

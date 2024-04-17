@@ -15,8 +15,9 @@ const Home = () => {
       try {
         // Fetch products data from the backend
         const response = await getProducts();
+        console.log(response.data.data)
         // Dispatch the action to set products in Redux store
-        dispatch(setAllProducts(response.data));
+        dispatch(setAllProducts(response.data.data));
 
         dispatch(setSellerProd())
         

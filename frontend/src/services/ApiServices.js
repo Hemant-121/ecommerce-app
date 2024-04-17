@@ -68,9 +68,9 @@ export const deleteProduct = async (id) => {
     }
 }
 
-export const getProductById = async (productId) => {
+export const getProductById = async (id) => {
     try {
-        return await axiosInstance.get(`/product/get-product/${productId}`)
+        return await axiosInstance.get(`/product/get-product/${id}`)
     } catch (error) {
       console.log("Error while getting product")
     }
@@ -88,6 +88,22 @@ export const getCategory = async (categoryId) => {
         return await axiosInstance.put(`/product/update-product/${productId}`, productData)
     } catch (error) {
         console.log("Error while updating product")
+    }
+  };
+
+  export const likeProduct = async (productId) => {
+    try {
+        return await axiosInstance.post(`/product/wishlist/${productId}`)
+    } catch (error) {
+        console.log("Error while adding to wishlist product")
+    }
+  };
+
+  export const checkIfLiked = async (productId) => {
+    try {
+        return await axiosInstance.post(`/product/isLiked/${productId}`)
+    } catch (error) {
+        console.log("Error while getting the liked status", error)
     }
   };
 

@@ -140,6 +140,29 @@ const deleteProduct = asyncHandler(async (req, res) => {
   
     return res.status(200).json(new ApiResponse(200, {}, "Product deleted successfully"));
   });
-  
 
-export { addProduct, getProducts, selllerProducts, getProduct, updateProduct, getCategory, deleteProduct };
+const addToWishlist = asyncHandler(async(req, res) => {
+
+    let {id} =  req.params;
+    let user = req.user;
+    let isLiked = user.wishList.includes(id);
+    if(isLiked){
+        await User.findByIdAndUpdate(req.user._id , {$pull: {wishList : id} })
+    }else{
+        await User.findByIdAndUpdate(req.user._id , {$addToSet: {wishList : id} })
+    }
+    return res.status(200).json(new ApiResponse(200, {}, "Ok"))
+})
+
+const isLiked = asyncHandler(async(req, res) => {
+
+    let {id} =  req.params;
+    let user = req.user;
+    let isLiked = user.wishList.includes(id);
+    if(isLiked){
+        return res.status(200).json(true)
+    }
+    return res.status(200).json(false)
+})
+
+export { addProduct, getProducts, selllerProducts, getProduct, updateProduct, getCategory, deleteProduct, addToWishlist, isLiked };

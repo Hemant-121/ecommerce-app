@@ -30,7 +30,7 @@ const ProductList = () => {
 
   return (
     <div className='w-[60vw] mx-auto mt-4'>
-      {products.map((product, index) => (
+      {products?.map((product, index) => (
         <div key={index}>
           <ListProduct
             product={product}

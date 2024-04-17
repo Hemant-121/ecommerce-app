@@ -111,9 +111,9 @@ const Register = () => {
               required
             />
           </div>
-          <div className="mb-2">
+         
 
-            <div className="flex w-full px-3 py-2 border rounded-md justify-between bg-white">
+            <div className="flex text-center h-10  w-full border rounded-md justify-between bg-white mb-2">
               <input
                 type={formData.showPassword ? "text" : "password"}
                 id="password"
@@ -121,14 +121,14 @@ const Register = () => {
                 placeholder="Password"
                 value={formData.password}
                 onChange={handleChange}
-                className="w-full outline:none focus:outline-none bg-white"
+                className="w-full h-[100%] px-2 rounded-sm outline:none focus:outline-none bg-white"
                 required
               />
-              <button type="button" onClick={handleTogglePassword} className="">
+              <button type="button" onClick={handleTogglePassword} className="px-2">
                 {formData.showPassword ? "Hide" : "Show"}
               </button>
             </div>
-          </div>
+         
 
           <div className="mb-2">
             

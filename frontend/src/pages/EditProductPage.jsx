@@ -139,11 +139,12 @@ const EditProductPage = () => {
               placeholder="Product Description"
                 id="prodDesc"
                 name="prodDesc"
+                
                 value={formData.prodDesc}
                 onChange={handleChange}
                 required
                 rows="4"
-                className="mt-1 p-2 w-full border border-gray-300 bg-blue-100 rounded-md focus:outline-none focus:border-indigo-500"
+                className="mt-1 p-2 w-full border resize-none border-gray-300 bg-blue-100 rounded-md focus:outline-none focus:border-indigo-500"
               />
             </div>
             <div className="col-span-2">
@@ -182,7 +183,7 @@ const EditProductPage = () => {
             type="submit"
             className="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-md w-full"
           >
-            Submit
+            Update
           </button>
           </form>
         </div>

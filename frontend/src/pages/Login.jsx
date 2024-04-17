@@ -29,7 +29,6 @@ const Login = () => {
     e.preventDefault();
     console.log(formData);
     const response = await userLogin(formData);
-    // console.log(response)
     if (!response.data.success) {
       toast.error(response.data.message);
     } else {
@@ -37,7 +36,6 @@ const Login = () => {
       dispatch(setUser(response.data.data));
       navigate('/')
     }
-    // console.log(response)
   };
 
 

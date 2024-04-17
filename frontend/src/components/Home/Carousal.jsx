@@ -24,7 +24,8 @@ const Carousal = () => {
       transitionDuration={100}
       autoPlay={true}
       keyBoardControl={true}
-      removeArrowOnDeviceType={["tablet", "mobile", "desktop"]}
+      // removeArrowOnDeviceType={["tablet", "mobile", "desktop"]}
+      removeArrowOnDeviceType={false}
       showDots={true}
       swipeable={true}
       draggable={true}
@@ -44,13 +45,13 @@ const Carousal = () => {
       </div>
       <div>
         <img
-          src="https://rukminim1.flixcart.com/fk-p-flap/3000/800/image/bd94c9e6358f3a70.jpg?q=20"
+          src="https://rukminim2.flixcart.com/fk-p-flap/3000/510/image/a6311495f641d028.jpg?q=20"
           className="w-full"
         />
       </div>
       <div>
         <img
-          src="https://rukminim1.flixcart.com/fk-p-flap/3000/800/image/bd94c9e6358f3a70.jpg?q=20"
+          src="https://rukminim2.flixcart.com/fk-p-flap/3000/510/image/ceb25a1e133b7c45.jpg?q=20"
           className="w-full"
         />
       </div>
@@ -59,3 +60,4 @@ const Carousal = () => {
 };
 
 export default Carousal;
+

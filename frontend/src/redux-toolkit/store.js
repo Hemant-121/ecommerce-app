@@ -6,11 +6,13 @@ import storage from 'redux-persist/lib/storage';
 import authSlice from './authSlice';
 import productSlice from './productSlice';
 import sellerProductSlice from './sellerProductSlice';
+import reviewsSlice from './reviewsSlice.js'
 
 const rootReducer = combineReducers({
   auth: authSlice,
   products: productSlice,
   sellerProducts: sellerProductSlice,
+  reviews: reviewsSlice,
 });
 
 const persistConfig = {

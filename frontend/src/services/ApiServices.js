@@ -98,23 +98,6 @@ export const getCategory = async (categoryId) => {
         console.log("Error while adding to wishlist product")
     }
   };
-  
-//   export const addToCart = async (productId) => {
-//     try {
-//         return await axiosInstance.post(`/product/addToCart/${productId}`)
-//     } catch (error) {
-//         console.log("Error while adding product in cart")
-//     }
-//   };
-
-//   export const getCartProducts = async (cart) => {
-//     try {
-//         return await axiosInstance.post(`/product/cart-products`, cart)
-//     } catch (error) {
-//         console.log("Error while adding product in cart")
-//     }
-//   };
-
 
 
 export const addToCart = async (productId) => {
@@ -148,6 +131,24 @@ export const updateProductQuantity = async (data) => {
         return await axiosInstance.post(`/product/update-quantity`, data);
     } catch (error) {
         console.error("Error while removing product from cart:", error);
+        throw error;
+    }
+};
+
+export const addReview = async (id, data) => {
+    try {
+        return await axiosInstance.post(`/review/addreview/${id}`, data);
+    } catch (error) {
+        console.error("Error while removing product from cart:", error);
+        throw error;
+    }
+};
+
+export const getReviews = async (id) => {
+    try {
+        return await axiosInstance.get(`/review/reviews/${id}`);
+    } catch (error) {
+        console.error("Error while fetching product reviews :", error);
         throw error;
     }
 };

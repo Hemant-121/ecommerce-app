@@ -53,9 +53,12 @@ const Cart = () => {
           })}
         </div>
       </div>
-      <div className="w-[33%] border">
-        <div>PRICE DETAILS</div>
-        <div>Price: {totalPrice}</div>
+      <div className="w-[33%] mt-9">
+        <div className="border p-3">
+        <div className="text-bold mb-2">PRICE DETAILS</div>
+        <div className="text-green-500">Price: ₹ {totalPrice}</div>
+
+        </div>
       </div>
     </div>
   );

@@ -126,8 +126,8 @@ const deleteProduct = asyncHandler(async (req, res) => {
       return res.status(404).json(new ApiResponse(404, {}, "Product not found"));
     }
   
-    // Find the user who owns the product and remove the product ID from their products array
-    const sellerId = deletedProduct.seller; // Assuming you have a userId field in your product schema
+    
+    const sellerId = deletedProduct.seller; 
     const user = await User.findById(sellerId);
   
     if (!user) {
@@ -164,23 +164,6 @@ const isLiked = asyncHandler(async(req, res) => {
     }
     return res.status(200).json(false)
 })
-
-// const addToCart = asyncHandler(async(req, res) => {
-//     let {id} =  req.params;
-//     let user = req.user;
-//     let inCart = user.cart.includes(id);
-//     if(inCart){
-//         await User.findByIdAndUpdate(req.user._id , {$pull: {cart : id} })
-//     }else{
-//         await User.findByIdAndUpdate(req.user._id , {$addToSet: {cart : id} })
-//     }
-//     return res.status(200).json(new ApiResponse(200, {}, "Ok"))
-// })
-// const cartProducts = asyncHandler(async(req, res) => { 
-//     const cart = req.body
-//     const products = await Product.find({ _id: { $in: cart } });
-//     return res.status(200).json(new ApiResponse(200, products, "Ok"))
-// })
 
 const addToCart = asyncHandler(async(req, res) => {
     const productId = req.params.id;

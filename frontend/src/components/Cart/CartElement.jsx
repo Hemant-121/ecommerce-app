@@ -7,20 +7,20 @@ import {
 } from "../../services/ApiServices";
 
 const CartElement = ({ product, fetchUser }) => {
-  const [count, setCount] = useState(product.quantity); // Initialize count with product quantity
+  const [count, setCount] = useState(product.quantity); 
 
   const increment = () => {
     if(count >= 10){
       return;
     }
     setCount(count + 1);
-    updateQuantity(count + 1); // Update quantity in database
+    updateQuantity(count + 1); 
   };
 
   const decrement = () => {
     if (count > 1) {
       setCount(count - 1);
-      updateQuantity(count - 1); // Update quantity in database
+      updateQuantity(count - 1); 
     }
   };
 
@@ -34,7 +34,7 @@ const CartElement = ({ product, fetchUser }) => {
     }
 
     setCount(e.target.value);
-    updateQuantity(e.target.value); // Update quantity in database
+    updateQuantity(e.target.value); 
     fetchUser();
   }
 
@@ -49,7 +49,7 @@ const CartElement = ({ product, fetchUser }) => {
   };
 
   useEffect(() => {
-    setCount(product.quantity); // Update count when product quantity changes
+    setCount(product.quantity); 
   }, [product.quantity]);
 
   return (

@@ -16,11 +16,11 @@ app.use(express.static("public"))
 app.use(cookieParser())
 
 
-const _dirname = path.resolve();
-app.use(express.static(path.join(_dirname, "/frontend/dist")));
-app.get('*', (_,res) => {
-    res.sendFile(path.resolve(_dirname, "frontend", "dist", "index.html"));
-});
+// const _dirname = path.resolve();
+// app.use(express.static(path.join(_dirname, "/frontend/dist")));
+// app.get('*', (_,res) => {
+//     res.sendFile(path.resolve(_dirname, "frontend", "dist", "index.html"));
+// });
 
 // routes import 
 import userRouter from './routes/user.routes.js';

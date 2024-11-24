@@ -227,7 +227,7 @@ const changeCurrentPassword = asyncHandler(async (req, res) => {
 const getCurrentUser = asyncHandler(async (req, res) => {
   return res
     .status(200)
-    .json(new ApiResponse(200, req.user, "User fetched successfully"));
+    .json(new ApiResponse(200, req?.user, "User fetched successfully"));
 });
 
 // Controller function to update account details
@@ -250,7 +250,7 @@ const updateAccountDetails = asyncHandler(async (req, res) => {
   }
 
   const existedUser = await User.findOne({ email });
-  if (existedUser && existedUser.username !== req.user.username) {
+  if (existedUser && existedUser?.username !== req?.user?.username) {
     throw new ApiError(409, "User with this email already exists");
   }
   // Update user details

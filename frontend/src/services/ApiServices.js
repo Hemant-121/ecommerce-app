@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 const url = `https://ecommerce-app-46o8.onrender.com/api/v1`;
+// const url = `http://localhost:8000/api/v1`;
 
 const axiosInstance = axios.create({
     baseURL: url,
@@ -27,35 +28,35 @@ export const userLogout = async () => {
     try {
         return await axiosInstance.post(`/users/logout`)
     } catch (error) {
-        console.log('Error while calling Signup API: ', error);
+        console.log('Error while logout the user API', error);
     }
 }
 export const getCurrentUser = async () => {
     try {
         return await axiosInstance.get(`/users/current-user`)
     } catch (error) {
-        console.log('Error while calling Signup API: ', error);
+        console.log('Error while fetching the current user API', error);
     }
 }
 export const AddNewProduct = async (data) => {
     try {
         return await axiosInstance.post(`/product/add-product`, data)
     } catch (error) {
-        console.log('Error while calling Signup API: ', error);
+        console.log('Error while adding a new product API', error);
     }
 }
 export const getProducts = async () => {
     try {
         return await axiosInstance.get(`/product/all-product`)
     } catch (error) {
-        console.log('Error while calling Signup API: ', error);
+        console.log('Error while getting all products API', error);
     }
 }
 export const getProductsForUser = async (id) => {
     try {
         return await axiosInstance.get(`/product/user-product/${id}`)
     } catch (error) {
-        console.log('Error while calling Signup API: ', error);
+        console.log('Error while getting seller products list API ', error);
     }
 }
 export const deleteProduct = async (id) => {
@@ -63,7 +64,7 @@ export const deleteProduct = async (id) => {
     try {
         return await axiosInstance.delete(`/product/delete-product/${id}`)
     } catch (error) {
-        console.log('Error while calling Signup API: ', error);
+        console.log('Error while deleting the product API', error);
     }
 }
 
@@ -71,14 +72,14 @@ export const getProductById = async (id) => {
     try {
         return await axiosInstance.get(`/product/get-product/${id}`)
     } catch (error) {
-      console.log("Error while getting product")
+      console.log("Error while getting a product detail page API")
     }
   };
 export const getCategory = async (categoryId) => {
     try {
         return await axiosInstance.get(`/product/get-category/${categoryId}`)
     } catch (error) {
-      console.log("Error while getting category")
+      console.log("Error while getting category API")
     }
   };
   
@@ -86,7 +87,7 @@ export const getCategory = async (categoryId) => {
     try {
         return await axiosInstance.put(`/product/update-product/${productId}`, productData)
     } catch (error) {
-        console.log("Error while updating product")
+        console.log("Error while updating product API")
     }
   };
 
@@ -94,7 +95,7 @@ export const getCategory = async (categoryId) => {
     try {
         return await axiosInstance.post(`/product/wishlist/${productId}`)
     } catch (error) {
-        console.log("Error while adding to wishlist product")
+        console.log("Error while adding to wishlist product API")
     }
   };
 
@@ -103,8 +104,7 @@ export const addToCart = async (productId) => {
     try {
         return await axiosInstance.post(`/product/addToCart/${productId}`);
     } catch (error) {
-        console.error("Error while adding product to cart:", error);
-        throw error; // Re-throw the error to handle it in the calling code
+        console.log("Error while adding to product into Cart API", error)
     }
 };
 
@@ -148,7 +148,7 @@ export const getReviews = async (id) => {
         return await axiosInstance.get(`/review/reviews/${id}`);
     } catch (error) {
         console.error("Error while fetching product reviews :", error);
-        throw error;
+        // throw error;
     }
 };
 

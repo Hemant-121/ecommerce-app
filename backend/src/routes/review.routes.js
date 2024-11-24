@@ -7,7 +7,7 @@ const router = Router();
 
 
 router.route("/addreview/:productId").post(verifyJWT, addReview);
-router.route("/reviews/:productId").get(verifyJWT, getProductReviews);
+router.route("/reviews/:productId").get(getProductReviews);
 
 
 export default router;

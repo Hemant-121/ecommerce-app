@@ -6,7 +6,7 @@ import storage from 'redux-persist/lib/storage';
 import authSlice from './authSlice';
 import productSlice from './productSlice';
 import sellerProductSlice from './sellerProductSlice';
-import reviewsSlice from './reviewsSlice.js'
+import reviewsSlice from './reviewsSlice.js';
 
 const rootReducer = combineReducers({
   auth: authSlice,
@@ -22,10 +22,17 @@ const persistConfig = {
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-
-
 const store = configureStore({
   reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        // Ignore redux-persist actions that involve non-serializable values
+        ignoredActions: ['persist/PERSIST', 'persist/REHYDRATE'],
+      },
+    }),
 });
+
 const persistor = persistStore(store);
+
 export { store, persistor };

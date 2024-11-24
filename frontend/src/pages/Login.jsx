@@ -33,7 +33,7 @@ const Login = () => {
       toast.error(response.data.message);
     } else {
       toast.success(response.data.message);
-      dispatch(setUser(response.data.data));
+      dispatch(setUser(response?.data?.data));
       navigate('/')
     }
   };

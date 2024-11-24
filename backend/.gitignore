@@ -22,7 +22,7 @@ public/build/
 .env.local
 .env.*.local
 
-# Cache and temporary files
+# Cache files
 .cache/
 .next/
 .nuxt/
@@ -50,21 +50,18 @@ Thumbs.db
 *.sw?
 *.iml
 
-# Lock files (optional, based on project policy)
-package-lock.json
-yarn.lock
-pnpm-lock.yaml
-
 # Test files and outputs
 *.spec.js
 *.test.js
 test-output/
 tests/
 
+# Lock files (optional, based on project policy)
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
 # Miscellaneous
 *.local
 *.log
 debug.log
-
-# Custom directories and files
-../data/
